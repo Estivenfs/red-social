@@ -275,7 +275,7 @@ const update = async (req, res) => {
         }else{
             delete userToUpdate.password;
         }
-        query = User.findByIdAndUpdate({_id : userIdentity.id}, userToUpdate, { new: true });
+        query = User.findByIdAndUpdate({_id : userIdentity.id}, userToUpdate, { new: true }).select({ password: 0, role: 0 });
         const userUpdated = await query.exec();
 
         if (!userUpdated) {
@@ -344,7 +344,7 @@ const uploadImage = async (req, res) => {
 
     //si todo es valido, sacar el id del usuario identificado
     try {
-        const userUpdated = await User.findByIdAndUpdate({_id : req.user.id}, { image: req.file.filename }, { new: true })
+        const userUpdated = await User.findByIdAndUpdate({_id : req.user.id}, { image: req.file.filename }, { new: true }).select({ password: 0, role: 0 });
         if (!userUpdated) {
             return res.status(500).json({
                 status: "error",

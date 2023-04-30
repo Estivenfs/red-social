@@ -1,4 +1,4 @@
-import { useForm } from '../../hooks/UseForm';
+import { useForm } from '../../hooks/useForm';
 import { Global } from '../../helpers/Global';
 import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
