@@ -1,6 +1,7 @@
 //importar dependencias y modulos
 const User = require('../models/user');
 const Follow = require('../models/follow');
+const Publication = require('../models/publications');
 const bcrypt = require('bcrypt');
 const jwt = require('../services/jwt');
 const fs = require('fs')
@@ -37,22 +38,22 @@ const registerUser = async (req, res) => {
             ]
         })
         const user = await query.exec();
-
+        params.nick = params.nick.toLowerCase();
         if (user) {
             if (user && user.email == params.email) {
                 return res.status(200).json({
-                    status: 'success',
+                    status: 'error',
                     message: 'El email ya está registrado'
                 });
             }
             if (user && user.nick == params.nick) {
                 return res.status(200).json({
-                    status: 'success',
+                    status: 'error',
                     message: 'El nick ya está registrado'
                 });
             }
             return res.status(200).json({
-                status: 'success',
+                status: 'error',
                 message: 'El usuario ya está registrado'
             });
 
@@ -63,7 +64,7 @@ const registerUser = async (req, res) => {
         try {
             const hash = await bcrypt.hash(params.password, 10);
             params.password = hash;
-
+            
             //Crear objeto de usuario
             let userToSave = new User(params);
             //Guardar usuario en la base de datos
@@ -121,6 +122,7 @@ const loginUser = async (req, res) => {
                     user: {
                         id: dataUser._id,
                         name: dataUser.name,
+                        surname: dataUser.surname,
                         nick: dataUser.nick
                     },
                     token
@@ -389,9 +391,13 @@ const avatar = async (req, res) => {
 const counters = async (req, res) => {
     const userId = req.params.id || req.user.id;
     try {
+        
         const following = await Follow.countDocuments({ user: userId }).exec();
+        
         const followed = await Follow.countDocuments({ followed: userId }).exec();
+        
         const publications = await Publication.countDocuments({ user: userId }).exec();
+        
         return res.status(200).json({
             status: 'success',
             userId,
@@ -402,7 +408,7 @@ const counters = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: 'error',
-            message: 'Error al devolver los datos'
+            message: 'Error al devolver los datos',
         })
     }
 }

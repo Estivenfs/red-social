@@ -2,8 +2,9 @@
     .layout {
         grid-template-areas:
             "nav nav"
-            "content content"
-            "aside aside";
+            "aside aside"
+            "content content";
+            
 
         grid-template-columns: 50% 50%;
     }
