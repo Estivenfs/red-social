@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Global } from '../../helpers/Global';
-import { UserList } from './UserList';
+import { getProfile } from '../../helpers/getProfile';
+import { UserList } from '../user/UserList';
+import { useParams } from 'react-router-dom';
 
 
-export const People = () => {
+export const Follower = () => {
 
 
   const [users, setUsers] = useState([]);
@@ -11,15 +13,18 @@ export const People = () => {
   const [nextButton, setNextButton] = useState(true);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState([]);
-
+  const [profile, setProfile] = useState({});
+    const paramsl = useParams();
 
   useEffect(() => {
     getUsers(1);
+    getProfile(paramsl.userId,setProfile);
   }, []);
 
-  const getUsers = async (nextPage) => {
+  const getUsers = async (nextPage=1) => {
     setLoading(true);
-    const url = Global.url + 'user/list/' + nextPage;
+    const userId = paramsl.userId;
+    const url = Global.url + 'follow/followers/' +userId +"/"+ nextPage;
     const params = {
       method: 'GET',
       headers: {
@@ -30,8 +35,12 @@ export const People = () => {
     try {
       const resp = await fetch(url, params);
       const data = await resp.json();
+      let cleanUsers = [];
       if (data.status === 'success') {
-        const newUsers = data.users;
+        data.follows.forEach((follow) => {
+          cleanUsers = [...cleanUsers, follow.user];
+        });
+        const newUsers = cleanUsers;
         const count = users.length + newUsers.length;
         setUsers([...users, ...newUsers]);
         setFollowing(data.users_following);
@@ -50,16 +59,12 @@ export const People = () => {
 
 
   }
-
-
-
-
-
+  
 
   return (
     <>
       <header className="content__header">
-        <h1 className="content__title">Gente</h1>
+        <h1 className="content__title">Seguidores de {profile.name} </h1>
 
       </header>
 

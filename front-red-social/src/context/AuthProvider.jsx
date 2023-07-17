@@ -56,9 +56,9 @@ export const AuthProvider = ({ children }) => {
           dataCounters
         );
       }
-      setTimeout(() => {
+      //setTimeout(() => {
         setLoading(false);
-      }, 2000);
+     // }, 2000);
     } catch (error) {
       console.log(error);
       setLoading(false);

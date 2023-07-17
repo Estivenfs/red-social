@@ -176,6 +176,9 @@ body {
     cursor: pointer;
 }
 
+.content__button--right{
+    float: right;
+}
 
 .content__button:hover, .content__btn-more-post:hover {
     background-color: var(--color-background-btn-success-hover);
@@ -203,7 +206,17 @@ body {
 .post__container{
     display: flex;
     flex-direction: row;
+    
 }
+
+.post__image{
+    width: 80%;
+    height: 70%;
+    overflow: hidden;
+    inset: 0;
+    border-radius: 10px;
+}
+
 
 .post__image-user{
     width: 7.5rem;
@@ -240,6 +253,8 @@ body {
 .post__buttons{
     display: flex;
     align-items: center;
+    
+    gap: 1rem;
  
 }
 
@@ -252,10 +267,19 @@ body {
     border-color: var(--color-border-btn-delete);
 }
 
+.post__button--green{
+    background-color: var(--color-background-btn-success);
+    border-color: var(--color-border-btn-success);
+}
 
 .post__button:hover{
     background-color: var(--color-background-btn-delete-hover);
     border-color: var(--color-border-btn-delete-hover);
+}
+
+.post__button--green:hover{
+    background-color: var(--color-background-btn-success-hover);
+    border-color: var(--color-border-btn-success-hover);
 }
 
 .content__container-btn{
@@ -300,7 +324,10 @@ body {
     display: flex;
     flex-direction: row;
 }
-
+.general-info__container-names{
+    width: 25%;
+    min-width: 250px;
+}
 .general-info__container-avatar{
     width: 7.5rem;
     height: 7.5rem;
@@ -440,7 +467,7 @@ button{
 }
 
 .alert{
-    width: 50%;
+    width: 60%;
     display: block;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -504,3 +531,54 @@ button{
     
 
 }
+
+.line-loader {
+    width:30px;
+    height:30px;
+    display: grid;
+    color: #5cb85c;
+  }
+  .line-loader,
+  .line-loader:before,
+  .line-loader:after {
+    --c: linear-gradient(currentColor 0 0);
+    background:var(--c), var(--c), var(--c), var(--c);
+    background-repeat: no-repeat;
+    animation: l9-1 1.5s infinite, l9-2 1.5s infinite;
+  }
+  .line-loader:before,
+  .line-loader:after {
+    content: "";
+    grid-area: 1/1;
+    transform: translate(calc(50% - 2px),calc(2px - 50%)) rotate(90deg);
+    animation-delay: -.25s;
+  }
+  .line-loader:after {
+    transform: translate(calc(2px - 50%),calc(50% - 2px)) rotate(90deg);
+  }
+  
+  
+  @keyframes l9-1 {
+    0%,
+    10%   {background-size: 0    4px,4px 0 }
+    40%,
+    60%   {background-size: 100% 4px,4px 100%}
+    90%,
+    100%  {background-size: 0    4px,4px 0  }
+  }
+  
+  @keyframes l9-2 {
+    0%,49.9%{background-position: 0    0,0    0,100% 100%,100% 100%}
+    50%,100%{background-position: 100% 0,0 100%,0    100%,100% 0}
+  }
+
+  .horizontal-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mg-10{
+    margin: 10px;
+    padding: 10px;
+  }

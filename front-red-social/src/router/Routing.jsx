@@ -8,6 +8,9 @@ import { Feed } from '../components/publication/Feed';
 import { AuthProvider } from '../context/AuthProvider';
 import { People } from '../components/user/People';
 import { Config } from '../components/user/Config';
+import { Following } from '../components/follow/Following';
+import { Follower } from '../components/follow/Followers';
+import { Profile } from '../components/user/Profile';
 
 export const Routing = () => {
   return (
@@ -24,15 +27,18 @@ export const Routing = () => {
             <Route path='feed' element={<Feed />} />
             <Route path='people' element={<People />} />
             <Route path='config' element={<Config />} />
+            <Route path='following/:userId' element={<Following/>} />
+            <Route path='followers/:userId' element={<Follower/>} />
+            <Route path='profile/:userId' element={<Profile/>} />
             <Route path='logout' element = {<Logout/>} />
 
           </Route>
           <Route path='*' element={
             <>
-              <p>
+              
                 <h1>Error 404</h1>
                 <Link to='/'>Volver al inicio</Link>
-              </p>
+              
             </>
           } />
         </Routes>

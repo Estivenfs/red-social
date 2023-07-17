@@ -1,164 +1,85 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import avatar from '../../assets/img/user.png'
-
+import { Link, useParams } from 'react-router-dom'
+import { Global } from '../../helpers/Global'
+import useAuth from '../../hooks/useAuth';
+import { PublicationList } from './PublicationList'
 
 export const Feed = () => {
-    
-  return (
-    <>
-        <header className="content__header">
+
+    const { auth } = useAuth();
+    const params = useParams();
+    const [publications, setPublications] = useState([]);
+    const [page, setPage] = useState(1);
+    const [nextButton, setNextButton] = useState(true);
+
+    useEffect(() => {
+        
+        
+        getPublications(1,false);
+        setNextButton(true);
+    }, []);
+
+
+    const getPublications = async (page = 1, showNews = false) => {
+
+        if(showNews){
+            setPublications([]);
+            setPage(1);
+            page=1;
+            setNextButton(true);
+        }
+
+        const url = Global.url + 'publication/feed/'  + page;
+        const params2 = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        }
+        try {
+            const resp = await fetch(url, params2);
+            const data = await resp.json();
+            if (data.status == 'success') {
+                
+                let newPublications = [];
+                if (page == 1) {
+                    newPublications=data.publications;
+                    setPage(1);
+                }
+                else{
+                    newPublications = [...publications, ...data.publications];
+                }
+                setPublications(newPublications);
+                
+                
+                if (newPublications.length >= data.total ) {
+                    setNextButton(false);
+                }
+                
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    return (
+        <>
+            <header className="content__header">
                 <h1 className="content__title">Timeline</h1>
-                <button className="content__button">Mostrar nuevas</button>
+                <button className="content__button" onClick={()=>getPublications(1,true)}>Mostrar nuevas</button>
             </header>
 
-            <div className="content__posts">
-
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
-                            </div>
-
-                            <h4 className="post__content">Hola, buenos dias.</h4>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
-                            </div>
-
-                            <h4 className="post__content">Hola, buenos dias.</h4>
-
-                        </div>
-                    </div>
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-                
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
-                            </div>
-
-                            <h4 className="post__content">Hola, buenos dias.</h4>
-
-                        </div>
-                    </div>
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-
-                
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
-                            </div>
-
-                            <h4 className="post__content">Hola, buenos dias.</h4>
-
-                        </div>
-                    </div>
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-            <div className="content__container-btn">
-                <button className="content__btn-more-post">
-                    Ver mas publicaciones
-                </button>
-            </div>
-    </>
-  )
+            <PublicationList 
+                publications={publications} 
+                getPublications={getPublications}
+                setPublications={setPublications}
+                page={page}
+                setPage={setPage}
+                nextButton={nextButton}
+                setNextButton={setNextButton}
+            />
+        </>
+    )
 }

@@ -210,7 +210,9 @@ const feed = async (req, res) => {
         .populate({ path: 'user', select: '-password -__v -role -email' })
         .paginate(page, itemsPerPage)
         .exec();
-        const total = await Publication.countDocuments();
+        const total = await Publication.countDocuments({
+            'user': { $in: myFollows }
+        });
         if(!publications || publications?.length<=0) return res.status(404).json({ status: 'error', message: 'No hay publicaciones para mostrar' });
         return res.status(200).json({
             status: 'success',

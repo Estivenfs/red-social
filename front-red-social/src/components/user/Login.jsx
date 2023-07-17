@@ -22,8 +22,10 @@ export const Login = () => {
         }
         //Guardar usar en la base de datos
         try {
+            
             const request = await fetch(Global.url+'user/login', options);
             const data = await request.json();
+            
             if (data.status === 'success') {
                 setSaved('login');
                 localStorage.setItem('token', data.token);

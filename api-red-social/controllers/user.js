@@ -8,6 +8,7 @@ const fs = require('fs')
 const path = require('path');
 const mongoosePagination = require('mongoose-pagination');
 const followService = require('../services/followService');
+const { validate } = require('../helpers/validate');
 //acciones de prueba
 const pruebaUser = (req, res) => {
     res.status(200).json({
@@ -30,6 +31,20 @@ const registerUser = async (req, res) => {
         });
     }
     //Control usuarios duplicados
+
+    //Validacion avanzada
+    let errors = validate(params);
+        if (Object.keys(errors).length > 0) {
+            let message = '';
+            for (const key in errors) {
+                message += errors[key] + ', ';
+            }
+            return res.status(400).json({
+                status: 'error',
+                message: message
+            });
+        }
+    
     try {
         const query = User.findOne({
             $or: [
@@ -64,7 +79,7 @@ const registerUser = async (req, res) => {
         try {
             const hash = await bcrypt.hash(params.password, 10);
             params.password = hash;
-            
+            params.email = params.email.toLowerCase();
             //Crear objeto de usuario
             let userToSave = new User(params);
             //Guardar usuario en la base de datos
